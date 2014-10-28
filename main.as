@@ -15,6 +15,7 @@
 		public var moveingFlag = false;				//しかおが移動中かどうかのフラグ
 		public var fieldSelectFlag = false;			//選択中かどうかのフラグ
 		public var fieldSelectStack = new Array();	//選択したフィールドのスタック
+		public var donguriStack = new Array();		//選択したフィールドのスタック
 
 		public function main() {
 			// フィールド生成
@@ -65,9 +66,12 @@
 		
 		private function mapSelectStart(e){
 			
+			trace(moveingFlag);
+			trace(shikao.pos);
 			if(!moveingFlag && fields[shikao.pos[0]][shikao.pos[1]].hitTestPoint(stage.mouseX,stage.mouseY)){
 				//スタックを初期化
 				fieldSelectStack = new Array();
+				donguriStack = new Array();
 				
 				//フィールド選択フラグを立てる
 				fieldSelectFlag = true;
@@ -81,12 +85,14 @@
 		}
 		
 		private function mapSelectMove(e){
-			trace("move :"+moveingFlag)
-			trace("field:"+fieldSelectFlag)
+			
+			//マウスダウン状態かどうか。
 			if(fieldSelectFlag){
 				for(var i=0;i<8;i++){
 					for(var j=0;j<6;j++){
 						if(fields[i][j].hitTestPoint(stage.mouseX,stage.mouseY) && fields[i][j].currentFrame == 1){
+
+							//初期設定をfalseに
 							var flag = false;
 							
 							//横軸が同じ場合
@@ -112,7 +118,13 @@
 								
 								//スタックに追加
 								fieldSelectStack.unshift([i,j]);
+								
+								if(dongris[i][j]){
+									donguriStack.push([i,j]);
+									trace("stack");
+								}
 							}
+							
 						}
 					}
 				}
@@ -126,15 +138,36 @@
 				//フラグを戻す
 				fieldSelectFlag = false;
 			
+				var donguriFlag = false;
+
+				for(var i=0;i<fieldSelectStack.length;i++){
+					if( donguriStack.length > 0 && fieldSelectStack[i][0] == donguriStack[donguriStack.length-1][0] && fieldSelectStack[i][1] == donguriStack[donguriStack.length-1][1]){
+						donguriFlag=true;
+						break;
+					}else{
+						fields[fieldSelectStack[i][0]][fieldSelectStack[i][1]].gotoAndStop(1);
+						fieldSelectStack.shift();
+						i--;
+					}
+				}
+				
 				//スタックを逆順から引き出し
-				for(var i=fieldSelectStack.length-2;i>=0;i--){
-					//移動をスタック
-					shikao.addMoveStack(fieldSelectStack[i][0],fieldSelectStack[i][1]);
+				for(i=fieldSelectStack.length-2;i>=0;i--){
+					
+					if(donguriFlag){
+						shikao.addMoveStack(fieldSelectStack[i][0],fieldSelectStack[i][1]);
+					}
 				
 				}
-				//移動開始
-				shikao.move();
-				moveingFlag = true;
+				if(donguriFlag){
+					//移動開始
+					shikao.move();
+					moveingFlag = true;
+					trace("!!!");
+				}else{
+					trace(shikao.pos);
+					moveingFlag = false;
+				}
 			}
 		}
 		
