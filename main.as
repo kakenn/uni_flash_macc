@@ -36,9 +36,17 @@
 			//半分進んだ時
 			shikao.addEventListener("moveHalf",function(){
 				fields[shikao.pos[0]][shikao.pos[1]].gotoAndStop(1);
+				
+				//移動先にどんぐりがあるか判断
 				if(donguris[shikao.newPos[0]][shikao.newPos[1]]){
+					
+					//あったら消す
 					removeChild(donguris[shikao.newPos[0]][shikao.newPos[1]]);
 					donguris[shikao.newPos[0]][shikao.newPos[1]]=null;
+					
+					/*
+						スコア追加とかここじゃなないですかね。
+					*/
 				}
 			});
 			
