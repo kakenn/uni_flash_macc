@@ -44,21 +44,19 @@
 			});
 		}
 		
-		public function setInfo(){
-		}
-		
 		//スタック追加
 		public function addMoveStack(_x,_y){
 			pos = [_x,_y];
 			move_stack.push([_x,_y]);
 		}
 		
-		//
+		//移動ストップ用関数
 		public function moveStop(){
 			move_stack = new Array();
 		}
 		
 		
+		//移動の設定関数
 		public function move(){
 			if(move_stack[0]){
 				targetX = move_stack[0][0]*fieldW+offsetX;
@@ -92,6 +90,8 @@
 			}
 		}
 		
+		
+		//移動用関数
 		public function mover(e){
 			if(Math.abs(moveX_Amount) > Math.abs(this.x-targetX) || Math.abs(moveY_Amount) > Math.abs(this.y-targetY)){
 				this.x=targetX;

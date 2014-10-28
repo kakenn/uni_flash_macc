@@ -64,6 +64,10 @@
 			addEventListener(MouseEvent.MOUSE_UP,mapSelectEnd);
 		}
 		
+		/*==========
+			フィールド選択用
+		==========*/
+		
 		private function mapSelectStart(e){
 			if(!moveingFlag){
 				fieldSelectFlag = true;
@@ -113,6 +117,10 @@
 			fieldSelectFlag = false;
 		}
 		
+
+		/*==========
+			フィールド生成用
+		==========*/
 		public function createField(){
 			for(var i=0;i<8;i++){
 				fields[i] = new Array();
