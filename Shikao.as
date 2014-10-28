@@ -19,6 +19,7 @@
 		
 		public var pos = new Array()						//しかおのポジション
 		public var newPos = new Array()						//しかおのポジション
+		public var oldPos = new Array()						//しかおのポジション
 		public var move_stack = new Array(); 				//移動のスタック
 		public var shika_direction;							//しかおの向き( 0:下 , 1:左 , 2:上 , 3:右 )
 		public var moveFinish = new Event("moveFinish");	//移動終了イベント
@@ -58,6 +59,7 @@
 		
 		//移動の設定関数
 		public function move(){
+			trace(move_stack[0]);
 			if(move_stack[0]){
 				targetX = move_stack[0][0]*fieldW+offsetX;
 				targetY = move_stack[0][1]*fieldH+offsetY;
@@ -98,6 +100,7 @@
 				this.y=targetY;
 				removeEventListener(Event.ENTER_FRAME,mover);
 				this.gotoAndPlay(1);
+				oldPos=pos;
 				pos=newPos;
 				this.dispatchEvent(moveFinish);
 			}else{

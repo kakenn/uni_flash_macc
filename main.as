@@ -26,28 +26,17 @@
 			//しかお追加
 			addChild(shikao);
 			
-			//移動をスタック
-			shikao.addMoveStack(1,0);
-			shikao.addMoveStack(1,1);
-			shikao.addMoveStack(1,2);
-			shikao.addMoveStack(2,2);
-			shikao.addMoveStack(2,3);
-			shikao.addMoveStack(3,3);
-			shikao.addMoveStack(4,3);
-			shikao.addMoveStack(5,3);
-			shikao.addMoveStack(6,3);
-			shikao.addMoveStack(7,3);
-			shikao.addMoveStack(7,4);
-			
-			//移動開始
-			shikao.move();
-			moveingFlag = true;
+			//移動完了したらフラグを戻す
 			shikao.addEventListener("stackFinish",function(){
 				moveingFlag = false;
 			});
 			
+			//画面クリックで移動をストップ
 			addEventListener(MouseEvent.CLICK,function(){
-				shikao.moveStop();
+				if(moveingFlag){
+					trace("moveStop");
+					shikao.moveStop();
+				}
 			});
 			
 			/*
@@ -70,8 +59,16 @@
 		
 		private function mapSelectStart(e){
 			if(!moveingFlag){
+				//スタックを初期化
+				fieldSelectStack = new Array();
+				
+				//フィールド選択フラグを立てる
 				fieldSelectFlag = true;
+				
+				//現在のしかおの位置をスタックに追加
 				fieldSelectStack.push(shikao.pos);
+				
+				//現在のしかおの位置を選択状態にする。
 				fields[shikao.pos[0]][shikao.pos[1]].gotoAndStop(2);
 			}
 		}
@@ -113,8 +110,21 @@
 			}
 		}
 		
+		//移動を開始
 		private function mapSelectEnd(e){
+			
+			//フラグを戻す
 			fieldSelectFlag = false;
+			
+			//スタックを逆順から引き出し
+			for(var i=fieldSelectStack.length-2;i>=0;i--){
+				//移動をスタック
+				shikao.addMoveStack(fieldSelectStack[i][0],fieldSelectStack[i][1]);
+				
+			}
+			//移動開始
+			shikao.move();
+			moveingFlag = true;
 		}
 		
 
