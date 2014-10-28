@@ -8,7 +8,7 @@
 		public const FIELD_START_X = 32; 	//フィールドの開始点_X
 		public const FIELD_START_Y = 50; 	//フィールドの開始点_Y
 		public var fields = new Array();
-		public var dongris = new Array();
+		public var donguris = new Array();
 		
 		public var shikao = new Shikao(FIELD_START_X,FIELD_START_Y,112,90);	//鹿
 		
@@ -33,9 +33,13 @@
 				fields[shikao.pos[0]][shikao.pos[1]].gotoAndStop(1);
 			});
 			
-			//移動完了したらフラグを戻す
+			//半分進んだ時
 			shikao.addEventListener("moveHalf",function(){
 				fields[shikao.pos[0]][shikao.pos[1]].gotoAndStop(1);
+				if(donguris[shikao.newPos[0]][shikao.newPos[1]]){
+					removeChild(donguris[shikao.newPos[0]][shikao.newPos[1]]);
+					donguris[shikao.newPos[0]][shikao.newPos[1]]=null;
+				}
 			});
 			
 			//画面クリックで移動をストップ
@@ -119,7 +123,7 @@
 								//スタックに追加
 								fieldSelectStack.unshift([i,j]);
 								
-								if(dongris[i][j]){
+								if(donguris[i][j]){
 									donguriStack.push([i,j]);
 									trace("stack");
 								}
@@ -178,7 +182,7 @@
 		public function createField(){
 			for(var i=0;i<8;i++){
 				fields[i] = new Array();
-				dongris[i] = new Array();
+				donguris[i] = new Array();
 				for(var j=0;j<6;j++){
 					
 					//フィールド生成
@@ -189,7 +193,7 @@
 
 
 					//どんぐり用配列生成
-					dongris[i][j]=null;
+					donguris[i][j]=null;
 				}
 			}
 		}
@@ -201,15 +205,15 @@
 				var _y = Math.floor(Math.random()*6);
 				
 				//その場所にドングリがあるか確認
-				if(!dongris[_x][_y]){
+				if(!donguris[_x][_y]){
 					
 					//なかったらドングリをその場所に生成
-					dongris[_x][_y]=new Donguri();
+					donguris[_x][_y]=new Donguri();
 					
 					//座標は適当
-					dongris[_x][_y].x=_x*112+FIELD_START_X; 
-					dongris[_x][_y].y=_y*90+FIELD_START_Y;
-					addChild(dongris[_x][_y]);
+					donguris[_x][_y].x=_x*112+FIELD_START_X; 
+					donguris[_x][_y].y=_y*90+FIELD_START_Y;
+					addChild(donguris[_x][_y]);
 				}else{
 					
 					//その場所にあった場合再度場所指定
