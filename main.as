@@ -1,17 +1,37 @@
 ﻿package  {
 	
 	import flash.display.MovieClip;
+	import flash.events.MouseEvent;
 	
 	
 	public class main extends MovieClip {
 		
 		public var fields = new Array();
 		public var dongris = new Array();
+		
+		public var shikao = new Shikao();	//鹿
 
 		public function main() {
-			// constructor code
+			// フィールド生成
 			createField();
+			
+			// フィールド生成
 			addDonguri(5);
+			
+			//しかお追加
+			addChild(shikao);
+			
+			//移動をスタック
+			shikao.addMoveStack(100,100);
+			shikao.addMoveStack(200,100);
+			shikao.addMoveStack(200,200);
+			
+			//移動開始
+			shikao.move();
+			
+			addEventListener(MouseEvent.CLICK,function(){
+				shikao.moveStop();
+			})
 		}
 		
 		public function createField(){
@@ -25,8 +45,8 @@
 					fields[i][j].x=i*112;
 					fields[i][j].y=j*90;
 					addChild(fields[i][j]);
-					
-					
+
+
 					//どんぐり用配列生成
 					dongris[i][j]=null;
 				}
@@ -44,7 +64,9 @@
 					
 					//なかったらドングリをその場所に生成
 					dongris[_x][_y]=new Donguri();
-					dongris[_x][_y].x=_x*112;
+					
+					//座標は適当
+					dongris[_x][_y].x=_x*112; 
 					dongris[_x][_y].y=_y*90;
 					addChild(dongris[_x][_y]);
 				}else{
