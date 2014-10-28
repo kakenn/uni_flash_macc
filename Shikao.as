@@ -50,7 +50,7 @@
 		//スタック追加
 		public function addMoveStack(_x,_y){
 			pos = [_x,_y];
-			move_stack.push([_x*fieldW+offsetX,_y*fieldH+offsetY]);
+			move_stack.push([_x,_y]);
 		}
 		
 		//
@@ -61,10 +61,12 @@
 		
 		public function move(){
 			if(move_stack[0]){
-				moveX_Amount = (Number(this.x - move_stack[0][0] < 0)-Number(this.x - move_stack[0][0] >0)) * moveX;
-				moveY_Amount = (Number(this.y - move_stack[0][1] < 0)-Number(this.y - move_stack[0][1] >0)) * moveY;
-				targetX = move_stack[0][0];
-				targetY = move_stack[0][1];
+				targetX = move_stack[0][0]*fieldW+offsetX;
+				targetY = move_stack[0][1]*fieldH+offsetY;
+				
+				moveX_Amount = (Number(this.x - targetX < 0)-Number(this.x - targetX >0)) * moveX;
+				moveY_Amount = (Number(this.y - targetY < 0)-Number(this.y - targetY >0)) * moveY;
+				
 				if(moveX_Amount<0){
 					this.gotoAndPlay(22);
 					shika_direction=1;
@@ -78,6 +80,7 @@
 					this.gotoAndPlay(1);
 					shika_direction=0;
 				}
+				
 				this.x += moveX_Amount;
 				this.y += moveY_Amount;
 				addEventListener(Event.ENTER_FRAME,mover);

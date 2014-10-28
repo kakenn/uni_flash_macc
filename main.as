@@ -12,8 +12,9 @@
 		
 		public var shikao = new Shikao(FIELD_START_X,FIELD_START_Y,112,90);	//鹿
 		
-		public var fieldSelectFlag = false;
-		public var fieldSelectStack = new Array();
+		public var moveingFlag = false;				//しかおが移動中かどうかのフラグ
+		public var fieldSelectFlag = false;			//選択中かどうかのフラグ
+		public var fieldSelectStack = new Array();	//選択したフィールドのスタック
 
 		public function main() {
 			// フィールド生成
@@ -40,6 +41,10 @@
 			
 			//移動開始
 			shikao.move();
+			moveingFlag = true;
+			shikao.addEventListener("stackFinish",function(){
+				moveingFlag = false;
+			});
 			
 			addEventListener(MouseEvent.CLICK,function(){
 				shikao.moveStop();
@@ -60,16 +65,44 @@
 		}
 		
 		private function mapSelectStart(e){
-			fieldSelectFlag = true;
-			fieldSelectStack.push(shikao.pos);
+			if(!moveingFlag){
+				fieldSelectFlag = true;
+				fieldSelectStack.push(shikao.pos);
+				fields[shikao.pos[0]][shikao.pos[1]].gotoAndStop(2);
+			}
 		}
 		
 		private function mapSelectMove(e){
 			if(fieldSelectFlag){
 				for(var i=0;i<8;i++){
 					for(var j=0;j<6;j++){
-						if(fields[i][j].hitTestPoint(stage.mouseX,stage.mouseY)){
-							fields[i][j].gotoAndStop(2);
+						if(fields[i][j].hitTestPoint(stage.mouseX,stage.mouseY) && fields[i][j].currentFrame == 1){
+							var flag = false;
+							
+							//横軸が同じ場合
+							if(fieldSelectStack[0][0]==i){
+								
+								//縦に±1だった場合にフラグを立てる
+								if(fieldSelectStack[0][1]-1==j || fieldSelectStack[0][1]+1==j){
+									flag=true;
+								}
+								
+							//縦軸が同じ場合
+							}else if(fieldSelectStack[0][1]==j){
+								
+								//横に±1だった場合にフラグを立てる
+								if(fieldSelectStack[0][0]-1==i || fieldSelectStack[0][0]+1==i){
+									flag=true;
+								}
+							}
+							if(flag){
+								
+								//見た目を変更
+								fields[i][j].gotoAndStop(2);
+								
+								//スタックに追加
+								fieldSelectStack.unshift([i,j]);
+							}
 						}
 					}
 				}
