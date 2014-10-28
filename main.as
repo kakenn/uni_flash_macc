@@ -64,7 +64,8 @@
 		==========*/
 		
 		private function mapSelectStart(e){
-			if(!moveingFlag){
+			
+			if(!moveingFlag && fields[shikao.pos[0]][shikao.pos[1]].hitTestPoint(stage.mouseX,stage.mouseY)){
 				//スタックを初期化
 				fieldSelectStack = new Array();
 				
@@ -80,6 +81,8 @@
 		}
 		
 		private function mapSelectMove(e){
+			trace("move :"+moveingFlag)
+			trace("field:"+fieldSelectFlag)
 			if(fieldSelectFlag){
 				for(var i=0;i<8;i++){
 					for(var j=0;j<6;j++){
@@ -119,18 +122,20 @@
 		//移動を開始
 		private function mapSelectEnd(e){
 			
-			//フラグを戻す
-			fieldSelectFlag = false;
+			if(fieldSelectFlag){
+				//フラグを戻す
+				fieldSelectFlag = false;
 			
-			//スタックを逆順から引き出し
-			for(var i=fieldSelectStack.length-2;i>=0;i--){
-				//移動をスタック
-				shikao.addMoveStack(fieldSelectStack[i][0],fieldSelectStack[i][1]);
+				//スタックを逆順から引き出し
+				for(var i=fieldSelectStack.length-2;i>=0;i--){
+					//移動をスタック
+					shikao.addMoveStack(fieldSelectStack[i][0],fieldSelectStack[i][1]);
 				
+				}
+				//移動開始
+				shikao.move();
+				moveingFlag = true;
 			}
-			//移動開始
-			shikao.move();
-			moveingFlag = true;
 		}
 		
 
