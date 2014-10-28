@@ -61,12 +61,17 @@
 		//移動の設定関数
 		public function move(){
 			if(move_stack[0]){
+				
+				//移動先の座標軸を変更
 				targetX = move_stack[0][0]*fieldW+offsetX;
 				targetY = move_stack[0][1]*fieldH+offsetY;
 				
+				//１フレームの移動量を計算
 				moveX_Amount = (Number(this.x - targetX < 0)-Number(this.x - targetX >0)) * moveX;
 				moveY_Amount = (Number(this.y - targetY < 0)-Number(this.y - targetY >0)) * moveY;
 				
+				
+				//向きの変更
 				if(moveX_Amount<0){
 					this.gotoAndPlay(22);
 					shika_direction=1;
@@ -81,10 +86,17 @@
 					shika_direction=0;
 				}
 				
+				//１フレーム分だけ止まるので先に動かす
 				this.x += moveX_Amount;
 				this.y += moveY_Amount;
+				
+				//移動イベントをエンターフレームに
 				addEventListener(Event.ENTER_FRAME,mover);
+				
+				//新しいポジションを記憶
 				newPos=move_stack[0];
+				
+				//今の移動ポイントを削除
 				move_stack.shift();
 			}else{
 				this.dispatchEvent(stackFinish);
