@@ -24,6 +24,7 @@
 		public var shika_direction;							//しかおの向き( 0:下 , 1:左 , 2:上 , 3:右 )
 		public var moveFinish = new Event("moveFinish");	//移動終了イベント
 		public var stackFinish = new Event("stackFinish");	//移動のスタック全終了イベント
+		public var moveHalf = new Event("moveHalf");		//半分移動したというイベント
 		
 		
 		public function Shikao(_offsetX,_offsetY,_fieldW,_fieldH) {
@@ -36,6 +37,7 @@
 			
 			//初期位置の設定
 			pos = [0,0];
+			oldPos = [0,0];
 			this.x=offsetX;
 			this.y=offsetY;
 			
@@ -47,7 +49,6 @@
 		
 		//スタック追加
 		public function addMoveStack(_x,_y){
-			pos = [_x,_y];
 			move_stack.push([_x,_y]);
 		}
 		
@@ -59,7 +60,6 @@
 		
 		//移動の設定関数
 		public function move(){
-			trace(move_stack[0]);
 			if(move_stack[0]){
 				targetX = move_stack[0][0]*fieldW+offsetX;
 				targetY = move_stack[0][1]*fieldH+offsetY;
@@ -102,10 +102,14 @@
 				this.gotoAndPlay(1);
 				oldPos=pos;
 				pos=newPos;
+				trace(oldPos);
 				this.dispatchEvent(moveFinish);
 			}else{
 				this.x += moveX_Amount;
 				this.y += moveY_Amount;
+			}
+			if(Math.abs(this.x-targetX) != 0 && Math.abs(this.x-targetX) < 50 || Math.abs(this.y-targetY) != 0 && Math.abs(this.y-targetY) < 50){
+				this.dispatchEvent(moveHalf);
 			}
 		}
 		

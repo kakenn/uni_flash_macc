@@ -29,6 +29,12 @@
 			//移動完了したらフラグを戻す
 			shikao.addEventListener("stackFinish",function(){
 				moveingFlag = false;
+				fields[shikao.pos[0]][shikao.pos[1]].gotoAndStop(1);
+			});
+			
+			//移動完了したらフラグを戻す
+			shikao.addEventListener("moveHalf",function(){
+				fields[shikao.pos[0]][shikao.pos[1]].gotoAndStop(1);
 			});
 			
 			//画面クリックで移動をストップ
