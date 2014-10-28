@@ -107,14 +107,25 @@
 		
 		//移動用関数
 		public function mover(e){
+			
+			//その場所についたかどうかを判断 *斜め移動すると詰む
 			if(Math.abs(moveX_Amount) > Math.abs(this.x-targetX) || Math.abs(moveY_Amount) > Math.abs(this.y-targetY)){
+				
+				//
 				this.x=targetX;
 				this.y=targetY;
+				
+				//移動をストップ
 				removeEventListener(Event.ENTER_FRAME,mover);
+				
+				//しかおを正面に向かせる
 				this.gotoAndPlay(1);
+				
+				//ポジション情報を更新
 				oldPos=pos;
 				pos=newPos;
-				trace(oldPos);
+				
+				//移動完了をディスパッチ
 				this.dispatchEvent(moveFinish);
 			}else{
 				this.x += moveX_Amount;
